@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .left-section, .right-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        input.error, select.error, textarea.error {
+            border-color: red;
+        }
+
+        button {
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s, background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .radio-option:hover {
+            transform: translateY(-2px);
+            background-color: #e9ecef;
+        }
+
+        .radio-option input[type="radio"] {
+            margin: 0;
+            width: 20px;
+            height: 20px;
+        }
+
+        .radio-option label {
+            margin: 0;
+            flex-grow: 1;
+            font-weight: bold;
+        }
+
+        .error-message, .success-message {
+            margin-bottom: 20px;
+        }
+
+        .warning {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .disabled-label {
+            color: #888;
+        }
+
+        #noAttemptsMessage {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #noAttemptsModal .modal-content {
+            background: linear-gradient(135deg, #ffffff, #f0f0f0);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        #noAttemptsModal h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        #noAttemptsModal p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        #noAttemptsModal .input-group {
+            margin-bottom: 20px;
+        }
+
+        #noAttemptsModal button {
+            padding: 12px 25px;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #noAttemptsModal button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .left-section, .right-section {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="noAttemptsMessage" style="display: none;"></div>
+    <div id="mainContainer" class="container" style="display: none;">
+        <div class="left-section">
+            <div class="input-group">
+                <label for="quality">Качество</label>
+                <select id="quality">
+                    <option value="144p">144p</option>
+                    <option value="240p">240p</option>
+                    <option value="360p">360p</option>
+                    <option value="480p">480p</option>
+                    <option value="720p60" selected>720p60</option>
+                    <option value="1080p60">1080p60 (HD)</option>
+                    <option value="1440p60">1440p60 (HD)</option>
+                    <option value="2160p60">2160p60 (4K)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="size">Размер фото (в пикселях)</label>
+                <input type="text" id="sizeInput" placeholder="1920x1080">
+                <select id="sizeSelect">
+                    <option value="">Выберите размер</option>
+                    <option value="640x480">640x480</option>
+                    <option value="1280x720">1280x720</option>
+                    <option value="1920x1080" selected>1920x1080</option>
+                    <option value="2560x1440">2560x1440</option>
+                    <option value="3840x2160">3840x2160</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="style">Стиль</label>
+                <select id="style">
+                    <option value="none" selected>Без стиля</option>
+                    <option value="realistic">Реалистичный</option>
+                    <option value="cartoon">Мультяшный</option>
+                    <option value="anime">Аниме</option>
+                    <option value="watercolor">Акварель</option>
+                    <option value="oil-painting">Масляная живопись</option>
+                    <option value="sketch">Эскиз</option>
+                    <option value="cyberpunk">Киберпанк</option>
+                    <option value="retro">Ретро</option>
+                    <option value="minimalist">Минимализм</option>
+                    <option value="surreal">Сюрреализм</option>
+                    <option value="pop-art">Поп-арт</option>
+                    <option value="vintage">Винтаж</option>
+                    <option value="fantasy">Фэнтези</option>
+                    <option value="steampunk">Стимпанк</option>
+                    <option value="abstract">Абстрактный</option>
+                    <option value="gothic">Готический</option>
+                    <option value="baroque">Барокко</option>
+                    <option value="futuristic">Футуристический</option>
+                    <option value="pixel-art">Пиксель-арт</option>
+                    <option value="impressionism">Импрессионизм</option>
+                    <option value="pointillism">Пуантилизм</option>
+                    <option value="cubism">Кубизм</option>
+                    <option value="expressionism">Экспрессионизм</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="color-tone">Тон цвета</label>
+                <select id="color-tone">
+                    <option value="natural">Натуральный</option>
+                    <option value="warm">Теплый</option>
+                    <option value="cool">Холодный</option>
+                    <option value="monochrome">Монохромный</option>
+                    <option value="vibrant">Яркий</option>
+                    <option value="pastel">Пастельный</option>
+                    <option value="sepia">Сепия</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="detail-level">Уровень детализации</label>
+                <select id="detail-level">
+                    <option value="weak">Слабый</option>
+                    <option value="normal" selected>Нормальный</option>
+                    <option value="high">Высокий</option>
+                    <option value="ultra">Ультра</option>
+                </select>
+            </div>
+        </div>
+        <div class="right-section">
+            <div class="input-group">
+                <label for="text">Текст</label>
+                <input type="text" id="text">
+            </div>
+            <div class="input-group">
+                <label for="autoTextStyle" class="disabled-label" id="autoTextStyleLabel">
+                    <input type="checkbox" id="autoTextStyle" disabled> Автоматический выбор стиля текста
+                </label>
+            </div>
+            <div class="input-group">
+                <label for="exclusions">Исключения</label>
+                <input type="text" id="exclusions">
+            </div>
+            <div class="input-group">
+                <label for="description">Описание (обязательно)</label>
+                <textarea id="description" rows="4" required></textarea>
+            </div>
+            <button onclick="generateImage()">Сгенерировать</button>
+            <div id="attemptsDisplay">Осталось генераций: <span id="attemptsLeft"></span>/2</div>
+        </div>
+    </div>
+
+    <div id="noAttemptsModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Попытки закончились</h2>
+            <p>У вас нет доступных генераций на сегодня. Загляните завтра!</p>
+            <div class="input-group">
+                <label for="promoCode">Введите промокод</label>
+                <input type="text" id="promoCode">
+            </div>
+            <button onclick="checkPromoCode()">Отправить</button>
+        </div>
+    </div>
+
+    <div id="promoClearModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Очистить промокод?</h2>
+            <p>У вас стоит промокод. Хотите очистить его и вернуть 2 генерации?</p>
+            <button onclick="clearPromoCode()">Да</button>
+            <button onclick="keepPromoCode()">Нет</button>
+        </div>
+    </div>
+
+    <div id="messengerModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Выберите способ отправки</h2>
+            <div class="radio-group">
+                <div class="radio-option" onclick="document.getElementById('whatsapp').click()">
+                    <input type="radio" name="messenger" id="whatsapp" value="whatsapp">
+                    <label for="whatsapp">Отправить мне по WhatsApp</label>
+                </div>
+                <div class="radio-option" onclick="document.getElementById('email').click()">
+                    <input type="radio" name="messenger" id="email" value="email">
+                    <label for="email">Отправить мне на почту</label>
+                </div>
+                <div class="radio-option" onclick="document.getElementById('telegram').click()">
+                    <input type="radio" name="messenger" id="telegram" value="telegram">
+                    <label for="telegram">Отправить мне по Telegram</label>
+                </div>
+                <div class="radio-option" onclick="document.getElementById('telegramBot').click()">
+                    <input type="radio" name="messenger" id="telegramBot" value="telegramBot">
+                    <label for="telegramBot">Отправить мне через Telegram бота</label>
+                </div>
+            </div>
+            <div id="contactInput" style="display: none;">
+                <div class="input-group">
+                    <label id="contactLabel"></label>
+                    <input type="text" id="contact">
+                </div>
+                <div class="input-group">
+                    <label>
+                        <input type="checkbox" id="rememberMe"> Запомнить меня
+                    </label>
+                </div>
+                <div id="warning" class="warning" style="display: none;"></div>
+            </div>
+            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+                <button id="continueButton" style="display: none;" onclick="handleContinue()">Продолжить</button>
+                <button onclick="goToMainMenu()">Главное меню</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="botUnlockModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Разблокируйте бота</h2>
+            <p>Чтобы получить результат, вы должны разблокировать этого бота, если он у вас заблокирован: <a href="https://t.me/NickNaymesBot" target="_blank">@NickNaymesBot</a></p>
+            <button onclick="proceedToSend()">Продолжить</button>
+        </div>
+    </div>
+
+    <div id="resultModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div id="successMessage" style="display: none;">
+                <h1 class="success-message">✨Творю волшебство!✨</h1>
+                <p>| Моё творение может занять около 2-х часов!</p>
+            </div>
+            <div id="errorMessage" style="display: none;">
+                <h2 class="error-message">Ошибка: <span id="errorCode"></span></h2>
+                <button onclick="goBack()">Назад</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BOT_TOKEN = '6537497957:AAHnaAc1x5qesBdNxOU9gQI27JdHvJ8IOMk';
+        const CHAT_ID = '6434781065';
+        const PROMO_CODE = 'QWERTY';
+        const MAX_DAILY_ATTEMPTS = 2;
+
+        const textInput = document.getElementById('text');
+        const autoTextStyle = document.getElementById('autoTextStyle');
+        const autoTextStyleLabel = document.getElementById('autoTextStyleLabel');
+        const descriptionInput = document.getElementById('description');
+        const sizeInput = document.getElementById('sizeInput');
+        const sizeSelect = document.getElementById('sizeSelect');
+        const exclusionsInput = document.getElementById('exclusions');
+        const qualitySelect = document.getElementById('quality');
+        const styleSelect = document.getElementById('style');
+        const colorToneSelect = document.getElementById('color-tone');
+        const detailLevelInput = document.getElementById('detail-level');
+        const mainContainer = document.getElementById('mainContainer');
+        const noAttemptsModal = document.getElementById('noAttemptsModal');
+        const promoClearModal = document.getElementById('promoClearModal');
+        const messengerModal = document.getElementById('messengerModal');
+        const botUnlockModal = document.getElementById('botUnlockModal');
+        const resultModal = document.getElementById('resultModal');
+        const contactInput = document.getElementById('contactInput');
+        const contactLabel = document.getElementById('contactLabel');
+        const continueButton = document.getElementById('continueButton');
+        const attemptsDisplay = document.getElementById('attemptsLeft');
+        const warning = document.getElementById('warning');
+        const noAttemptsMessage = document.getElementById('noAttemptsMessage');
+        const rememberMe = document.getElementById('rememberMe');
+
+        let formData = JSON.parse(localStorage.getItem('formData')) || {};
+        let contactData = JSON.parse(localStorage.getItem('contactData')) || { contact: '', messenger: '' };
+        let hasShownPromoClear = false;
+
+        function saveFormData() {
+            formData = {
+                text: textInput.value,
+                autoTextStyle: autoTextStyle.checked,
+                description: descriptionInput.value,
+                exclusions: exclusionsInput.value,
+                quality: qualitySelect.value,
+                size: sizeInput.value || sizeSelect.value,
+                style: styleSelect.value,
+                colorTone: colorToneSelect.value,
+                detailLevel: detailLevelInput.value || 'normal'
+            };
+            localStorage.setItem('formData', JSON.stringify(formData));
+        }
+
+        function restoreFormData() {
+            textInput.value = formData.text || '';
+            autoTextStyle.checked = formData.autoTextStyle || false;
+            autoTextStyle.disabled = !textInput.value.trim();
+            autoTextStyleLabel.className = autoTextStyle.disabled ? 'disabled-label' : '';
+            descriptionInput.value = formData.description || '';
+            exclusionsInput.value = formData.exclusions || '';
+            qualitySelect.value = formData.quality || '720p60';
+            sizeInput.value = formData.size || '';
+            sizeSelect.value = formData.size || '';
+            styleSelect.value = formData.style || 'none';
+            colorToneSelect.value = formData.colorTone || 'natural';
+            detailLevelInput.value = formData.detailLevel || 'normal';
+        }
+
+        function getStoredData() {
+            return JSON.parse(localStorage.getItem('imageGeneratorData')) || {};
+        }
+
+        function setStoredData(data) {
+            localStorage.setItem('imageGeneratorData', JSON.stringify(data));
+        }
+
+        function checkAttempts() {
+            const data = getStoredData();
+            const today = new Date().toISOString().split('T')[0];
+            if (!data.date || data.date !== today) {
+                data.date = today;
+                data.attempts = 0;
+                data.promoCode = data.promoCode || null;
+                setStoredData(data);
+            }
+
+            const attemptsLeft = data.promoCode === PROMO_CODE ? 6 - data.attempts : MAX_DAILY_ATTEMPTS - data.attempts;
+            attemptsDisplay.textContent = attemptsLeft > 0 ? attemptsLeft : 0;
+            if (data.promoCode === PROMO_CODE) {
+                if (data.attempts >= 6 && !hasShownPromoClear) {
+                    hasShownPromoClear = true;
+                    promoClearModal.style.display = 'flex';
+                    mainContainer.style.display = 'none';
+                    return false;
+                }
+            } else if (data.attempts >= MAX_DAILY_ATTEMPTS) {
+                if (!data.promoCode) {
+                    noAttemptsMessage.style.display = 'block';
+                    noAttemptsMessage.textContent = 'У вас не осталось генераций. Зайдите завтра заново.';
+                    const existingPromoInput = document.getElementById('promoCodeInitial');
+                    if (!existingPromoInput) {
+                        const promoInput = document.createElement('input');
+                        promoInput.type = 'text';
+                        promoInput.id = 'promoCodeInitial';
+                        promoInput.placeholder = 'Введите промокод';
+                        noAttemptsMessage.insertAdjacentElement('afterend', promoInput);
+                        const applyButton = document.createElement('button');
+                        applyButton.textContent = 'Отправить';
+                        applyButton.onclick = checkPromoCodeInitial;
+                        promoInput.insertAdjacentElement('afterend', applyButton);
+                    }
+                    mainContainer.style.display = 'none';
+                    return false;
+                } else if (data.attempts >= 6 && !hasShownPromoClear) {
+                    hasShownPromoClear = true;
+                    promoClearModal.style.display = 'flex';
+                    mainContainer.style.display = 'none';
+                    return false;
+                }
+            }
+
+            noAttemptsMessage.style.display = 'none';
+            mainContainer.style.display = 'flex';
+            hasShownPromoClear = false;
+            return true;
+        }
+
+        function incrementAttempts() {
+            const data = getStoredData();
+            data.attempts = (data.attempts || 0) + 1;
+            setStoredData(data);
+            const attemptsLeft = data.promoCode === PROMO_CODE ? 6 - data.attempts : MAX_DAILY_ATTEMPTS - data.attempts;
+            attemptsDisplay.textContent = attemptsLeft > 0 ? attemptsLeft : 0;
+        }
+
+        function checkPromoCode() {
+            const promoInput = document.getElementById('promoCode');
+            if (promoInput.value === PROMO_CODE) {
+                const data = getStoredData();
+                data.promoCode = PROMO_CODE;
+                data.attempts = 0;
+                setStoredData(data);
+                noAttemptsModal.style.display = 'none';
+                checkAttempts(); // Update UI immediately
+                mainContainer.style.display = 'flex';
+            } else {
+                warning.textContent = 'Неверный промокод';
+                warning.style.display = 'block';
+            }
+        }
+
+        function checkPromoCodeInitial() {
+            const promoInput = document.getElementById('promoCodeInitial');
+            if (promoInput.value === PROMO_CODE) {
+                const data = getStoredData();
+                data.promoCode = PROMO_CODE;
+                data.attempts = 0;
+                setStoredData(data);
+                noAttemptsMessage.style.display = 'none';
+                promoInput.remove();
+                applyButton.remove();
+                checkAttempts(); // Update UI immediately
+                mainContainer.style.display = 'flex';
+            } else {
+                noAttemptsMessage.textContent = 'Неверный промокод';
+            }
+        }
+
+        function clearPromoCode() {
+            const data = getStoredData();
+            data.promoCode = null;
+            data.attempts = 0;
+            setStoredData(data);
+            promoClearModal.style.display = 'none';
+            noAttemptsModal.style.display = 'flex';
+        }
+
+        function keepPromoCode() {
+            promoClearModal.style.display = 'none';
+            mainContainer.style.display = 'flex';
+        }
+
+        textInput.addEventListener('input', () => {
+            autoTextStyle.disabled = !textInput.value.trim();
+            if (autoTextStyle.checked && !textInput.value.trim()) {
+                autoTextStyle.checked = false;
+            }
+            autoTextStyleLabel.className = autoTextStyle.disabled ? 'disabled-label' : '';
+            saveFormData();
+        });
+
+        sizeSelect.addEventListener('change', () => {
+            if (sizeSelect.value) {
+                sizeInput.value = sizeSelect.value;
+            }
+            saveFormData();
+        });
+
+        function validateInputs() {
+            let isValid = true;
+            [descriptionInput, sizeInput].forEach(input => {
+                input.classList.remove('error');
+                if (!input.value.trim()) {
+                    input.classList.add('error');
+                    isValid = false;
+                }
+            });
+
+            const sizePattern = /^\d+x\d+$/;
+            if (sizeInput.value && !sizePattern.test(sizeInput.value)) {
+                warning.textContent = 'Размер должен быть указан в формате пикселей (например, 1920x1080)';
+                warning.style.display = 'block';
+                sizeInput.classList.add('error');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function generateImage() {
+            if (!validateInputs()) return;
+            saveFormData();
+            if (!checkAttempts()) {
+                if (getStoredData().promoCode) {
+                    promoClearModal.style.display = 'flex';
+                } else {
+                    noAttemptsModal.style.display = 'flex';
+                }
+                return;
+            }
+            messengerModal.style.display = 'flex';
+            if (contactData.messenger && rememberMe.checked) {
+                contactInput.style.display = 'block';
+                contactInput.querySelector('input').value = contactData.contact || '';
+                if (contactData.messenger === 'whatsapp') {
+                    contactLabel.textContent = 'Отправьте мне номер телефона привязанный к нужному аккаунту WhatsApp';
+                    contactInput.querySelector('input').placeholder = '+1234567890';
+                } else if (contactData.messenger === 'email') {
+                    contactLabel.textContent = 'Введите свой адрес электронной почты';
+                    contactInput.querySelector('input').placeholder = 'example@email.com';
+                } else if (contactData.messenger === 'telegram') {
+                    contactLabel.textContent = 'Введите свой Telegram @username или номер телефона в международном формате (+код)';
+                    contactInput.querySelector('input').placeholder = '@username или +1234567890';
+                } else if (contactData.messenger === 'telegramBot') {
+                    contactLabel.textContent = 'Введите свой Telegram ID (до 10 цифр)';
+                    contactInput.querySelector('input').placeholder = '1234567890';
+                }
+                continueButton.style.display = 'block';
+                warning.style.display = 'none';
+                rememberMe.checked = true;
+            }
+        }
+
+        document.querySelectorAll('input[name="messenger"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                contactInput.style.display = 'block';
+                if (radio.value === 'whatsapp') {
+                    contactLabel.textContent = 'Отправьте мне номер телефона привязанный к нужному аккаунту WhatsApp';
+                    contactInput.querySelector('input').placeholder = '+1234567890';
+                } else if (radio.value === 'email') {
+                    contactLabel.textContent = 'Введите свой адрес электронной почты';
+                    contactInput.querySelector('input').placeholder = 'example@email.com';
+                } else if (radio.value === 'telegram') {
+                    contactLabel.textContent = 'Введите свой Telegram @username или номер телефона в международном формате (+код)';
+                    contactInput.querySelector('input').placeholder = '@username или +1234567890';
+                } else if (radio.value === 'telegramBot') {
+                    contactLabel.textContent = 'Введите свой Telegram ID (до 10 цифр)';
+                    contactInput.querySelector('input').placeholder = '1234567890';
+                }
+                continueButton.style.display = 'block';
+                warning.style.display = 'none';
+            });
+        });
+
+        function handleContinue() {
+            const selectedMessenger = document.querySelector('input[name="messenger"]:checked');
+            if (!selectedMessenger) {
+                warning.textContent = 'Выберите способ отправки';
+                warning.style.display = 'block';
+                return;
+            }
+
+            const contact = contactInput.querySelector('input');
+            if (!contact.value.trim()) {
+                contact.classList.add('error');
+                warning.textContent = 'Введите контакт';
+                warning.style.display = 'block';
+                return;
+            }
+
+            const phoneRegex = /^\+\d{6,14}$/; // International phone format: + followed by 6-14 digits
+            if (selectedMessenger.value === 'whatsapp' || selectedMessenger.value === 'telegram') {
+                if (!phoneRegex.test(contact.value.trim())) {
+                    contact.classList.add('error');
+                    warning.textContent = 'Введите номер телефона в международном формате (например, +1234567890)';
+                    warning.style.display = 'block';
+                    return;
+                }
+            } else if (selectedMessenger.value === 'email') {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(contact.value.trim())) {
+                    contact.classList.add('error');
+                    warning.textContent = 'Неверный формат электронной почты';
+                    warning.style.display = 'block';
+                    return;
+                }
+            } else if (selectedMessenger.value === 'telegramBot') {
+                const telegramIdPattern = /^\d{1,10}$/;
+                if (!telegramIdPattern.test(contact.value.trim())) {
+                    contact.classList.add('error');
+                    warning.textContent = 'ID должен содержать до 10 цифр';
+                    warning.style.display = 'block';
+                    return;
+                }
+            }
+
+            if (rememberMe.checked) {
+                contactData.contact = contact.value;
+                contactData.messenger = selectedMessenger.value;
+                localStorage.setItem('contactData', JSON.stringify(contactData));
+            } else {
+                contactData = { contact: '', messenger: '' };
+                localStorage.removeItem('contactData');
+            }
+
+            if (selectedMessenger.value === 'telegramBot') {
+                messengerModal.style.display = 'none';
+                botUnlockModal.style.display = 'flex';
+            } else if (selectedMessenger.value === 'email') {
+                proceedToSend();
+            } else {
+                proceedToSend();
+            }
+        }
+
+        function goBack() {
+            resultModal.style.display = 'none';
+            mainContainer.style.display = 'none';
+            restoreFormData();
+        }
+
+        function goToMainMenu() {
+            messengerModal.style.display = 'none';
+            mainContainer.style.display = 'flex';
+            restoreFormData();
+        }
+
+        function proceedToSend() {
+            const selectedMessenger = document.querySelector('input[name="messenger"]:checked').value;
+            const contact = contactInput.querySelector('input').value;
+            const autoTextStyleText = autoTextStyle.checked ? 'Автоматический выбор стиля текста включено.' : 'Автоматический выбор стиля текста выключено.';
+            const message = `
+Описание: ${descriptionInput.value}
+Текст: ${textInput.value || 'Не указан'}
+Исключения: ${exclusionsInput.value || 'Не указан'}
+Качество: ${qualitySelect.value}
+Размер: ${sizeInput.value || sizeSelect.value}
+Стиль: ${styleSelect.value}
+Тон цвета: ${colorToneSelect.value}
+Уровень детализации: ${detailLevelInput.value || 'normal'}
+${autoTextStyleText}
+Контакт: ${selectedMessenger} (${contact})
+            `;
+
+            // Increment attempts before sending
+            incrementAttempts();
+
+            messengerModal.style.display = 'none';
+            botUnlockModal.style.display = 'none';
+            resultModal.style.display = 'flex';
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.ok) {
+                    // Revert attempt increment on failure
+                    const storedData = getStoredData();
+                    storedData.attempts = Math.max(0, (storedData.attempts || 0) - 1);
+                    setStoredData(storedData);
+                    checkAttempts();
+                    document.getElementById('successMessage').style.display = 'none';
+                    document.getElementById('errorMessage').style.display = 'block';
+                    document.getElementById('errorCode').textContent = data.error_code || 'Неизвестная ошибка';
+                }
+            })
+            .catch(error => {
+                // Revert attempt increment on error
+                const storedData = getStoredData();
+                storedData.attempts = Math.max(0, (storedData.attempts || 0) - 1);
+                setStoredData(storedData);
+                checkAttempts();
+                document.getElementById('successMessage').style.display = 'none';
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('errorCode').textContent = error.message || 'Неизвестная ошибка';
+            });
+        }
+
+        window.onload = () => {
+            restoreFormData();
+            checkAttempts();
+            if (contactData.messenger && JSON.parse(localStorage.getItem('contactData'))) {
+                rememberMe.checked = true;
+            }
+        };
+    </script>
+</body>
+</html>
