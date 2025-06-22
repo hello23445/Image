@@ -18,7 +18,7 @@
             align-items: flex-start;
             min-height: 100vh;
             padding: 20px;
-            background-color: #f0f0f0;
+            background: linear-gradient(135deg, #74ABE2, #5563DE);
         }
 
         .container {
@@ -195,6 +195,20 @@
 
         #noAttemptsModal .input-group {
             margin-bottom: 20px;
+            position: relative;
+        }
+
+        #noAttemptsModal input {
+            padding: 12px;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        #noAttemptsModal input:focus {
+            border-color: #45a049;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
         }
 
         #noAttemptsModal button {
@@ -313,15 +327,15 @@
                 </label>
             </div>
             <div class="input-group">
-                <label for="exclusions">Исключения</label>
+                <label for="exclusions">Чего на фото не должно быть?</label>
                 <input type="text" id="exclusions">
             </div>
             <div class="input-group">
-                <label for="description">Описание (обязательно)</label>
+                <label for="description">Описание фото(обязательно)</label>
                 <textarea id="description" rows="4" required></textarea>
             </div>
             <button onclick="generateImage()">Сгенерировать</button>
-            <div id="attemptsDisplay">Осталось генераций: <span id="attemptsLeft"></span>/2</div>
+            <div id="attemptsDisplay"><b>Осталось генераций: <span id="attemptsLeft"></span>/2</b></div>
         </div>
     </div>
 
@@ -398,7 +412,7 @@
         <div class="modal-content">
             <div id="successMessage" style="display: none;">
                 <h1 class="success-message">✨Творю волшебство!✨</h1>
-                <p>| Моё творение может занять около 2-х часов!</p>
+                <p>| Моё творение может занять около 2-х часов! |</p>
             </div>
             <div id="errorMessage" style="display: none;">
                 <h2 class="error-message">Ошибка: <span id="errorCode"></span></h2>
@@ -441,6 +455,13 @@
         let formData = JSON.parse(localStorage.getItem('formData')) || {};
         let contactData = JSON.parse(localStorage.getItem('contactData')) || { contact: '', messenger: '' };
         let hasShownPromoClear = false;
+
+        // Hide keyboard on click outside input
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('input, textarea, select, button')) {
+                document.activeElement.blur();
+            }
+        });
 
         function saveFormData() {
             formData = {
@@ -502,13 +523,13 @@
             } else if (data.attempts >= MAX_DAILY_ATTEMPTS) {
                 if (!data.promoCode) {
                     noAttemptsMessage.style.display = 'block';
-                    noAttemptsMessage.textContent = 'У вас не осталось генераций. Зайдите завтра заново.';
+                    noAttemptsMessage.textContent = 'У вас не осталось генераций. Зайдите завтра заново.\n';
                     const existingPromoInput = document.getElementById('promoCodeInitial');
                     if (!existingPromoInput) {
                         const promoInput = document.createElement('input');
                         promoInput.type = 'text';
                         promoInput.id = 'promoCodeInitial';
-                        promoInput.placeholder = 'Введите промокод';
+                        promoInput.placeholder = 'Введите промокод здесь';
                         noAttemptsMessage.insertAdjacentElement('afterend', promoInput);
                         const applyButton = document.createElement('button');
                         applyButton.textContent = 'Отправить';
@@ -547,8 +568,8 @@
                 data.attempts = 0;
                 setStoredData(data);
                 noAttemptsModal.style.display = 'none';
-                checkAttempts(); // Update UI immediately
                 mainContainer.style.display = 'flex';
+                checkAttempts();
             } else {
                 warning.textContent = 'Неверный промокод';
                 warning.style.display = 'block';
@@ -564,9 +585,9 @@
                 setStoredData(data);
                 noAttemptsMessage.style.display = 'none';
                 promoInput.remove();
-                applyButton.remove();
-                checkAttempts(); // Update UI immediately
+                document.querySelector('button[onclick="checkPromoCodeInitial"]').remove();
                 mainContainer.style.display = 'flex';
+                checkAttempts();
             } else {
                 noAttemptsMessage.textContent = 'Неверный промокод';
             }
@@ -637,20 +658,26 @@
             messengerModal.style.display = 'flex';
             if (contactData.messenger && rememberMe.checked) {
                 contactInput.style.display = 'block';
-                contactInput.querySelector('input').value = contactData.contact || '';
+                const contactField = contactInput.querySelector('input');
                 if (contactData.messenger === 'whatsapp') {
                     contactLabel.textContent = 'Отправьте мне номер телефона привязанный к нужному аккаунту WhatsApp';
-                    contactInput.querySelector('input').placeholder = '+1234567890';
+                    contactField.placeholder = '+1234567890';
+                    contactField.type = 'text';
                 } else if (contactData.messenger === 'email') {
                     contactLabel.textContent = 'Введите свой адрес электронной почты';
-                    contactInput.querySelector('input').placeholder = 'example@email.com';
+                    contactField.placeholder = 'example@email.com';
+                    contactField.type = 'email';
                 } else if (contactData.messenger === 'telegram') {
                     contactLabel.textContent = 'Введите свой Telegram @username или номер телефона в международном формате (+код)';
-                    contactInput.querySelector('input').placeholder = '@username или +1234567890';
+                    contactField.placeholder = '@username или +1234567890';
+                    contactField.type = 'text';
                 } else if (contactData.messenger === 'telegramBot') {
-                    contactLabel.textContent = 'Введите свой Telegram ID (до 10 цифр)';
-                    contactInput.querySelector('input').placeholder = '1234567890';
+                    contactLabel.textContent = 'Введите свой Telegram ID';
+                    contactField.placeholder = '1234567890';
+                    contactField.type = 'text';
                 }
+                contactField.value = contactData.contact || '';
+                document.getElementById(contactData.messenger).checked = true;
                 continueButton.style.display = 'block';
                 warning.style.display = 'none';
                 rememberMe.checked = true;
@@ -660,18 +687,23 @@
         document.querySelectorAll('input[name="messenger"]').forEach(radio => {
             radio.addEventListener('change', () => {
                 contactInput.style.display = 'block';
+                const contactField = contactInput.querySelector('input');
                 if (radio.value === 'whatsapp') {
                     contactLabel.textContent = 'Отправьте мне номер телефона привязанный к нужному аккаунту WhatsApp';
-                    contactInput.querySelector('input').placeholder = '+1234567890';
+                    contactField.placeholder = '+1234567890';
+                    contactField.type = 'text';
                 } else if (radio.value === 'email') {
                     contactLabel.textContent = 'Введите свой адрес электронной почты';
-                    contactInput.querySelector('input').placeholder = 'example@email.com';
+                    contactField.placeholder = 'example@email.com';
+                    contactField.type = 'email';
                 } else if (radio.value === 'telegram') {
                     contactLabel.textContent = 'Введите свой Telegram @username или номер телефона в международном формате (+код)';
-                    contactInput.querySelector('input').placeholder = '@username или +1234567890';
+                    contactField.placeholder = '@username или +1234567890';
+                    contactField.type = 'text';
                 } else if (radio.value === 'telegramBot') {
-                    contactLabel.textContent = 'Введите свой Telegram ID (до 10 цифр)';
-                    contactInput.querySelector('input').placeholder = '1234567890';
+                    contactLabel.textContent = 'Введите свой Telegram ID';
+                    contactField.placeholder = '1234567890';
+                    contactField.type = 'text';
                 }
                 continueButton.style.display = 'block';
                 warning.style.display = 'none';
@@ -694,7 +726,7 @@
                 return;
             }
 
-            const phoneRegex = /^\+\d{6,14}$/; // International phone format: + followed by 6-14 digits
+            const phoneRegex = /^\+\d{6,14}$/;
             if (selectedMessenger.value === 'whatsapp' || selectedMessenger.value === 'telegram') {
                 if (!phoneRegex.test(contact.value.trim())) {
                     contact.classList.add('error');
@@ -732,8 +764,6 @@
             if (selectedMessenger.value === 'telegramBot') {
                 messengerModal.style.display = 'none';
                 botUnlockModal.style.display = 'flex';
-            } else if (selectedMessenger.value === 'email') {
-                proceedToSend();
             } else {
                 proceedToSend();
             }
@@ -741,7 +771,7 @@
 
         function goBack() {
             resultModal.style.display = 'none';
-            mainContainer.style.display = 'none';
+            mainContainer.style.display = 'flex';
             restoreFormData();
         }
 
@@ -768,7 +798,6 @@ ${autoTextStyleText}
 Контакт: ${selectedMessenger} (${contact})
             `;
 
-            // Increment attempts before sending
             incrementAttempts();
 
             messengerModal.style.display = 'none';
@@ -790,7 +819,6 @@ ${autoTextStyleText}
             .then(response => response.json())
             .then(data => {
                 if (!data.ok) {
-                    // Revert attempt increment on failure
                     const storedData = getStoredData();
                     storedData.attempts = Math.max(0, (storedData.attempts || 0) - 1);
                     setStoredData(storedData);
@@ -801,7 +829,6 @@ ${autoTextStyleText}
                 }
             })
             .catch(error => {
-                // Revert attempt increment on error
                 const storedData = getStoredData();
                 storedData.attempts = Math.max(0, (storedData.attempts || 0) - 1);
                 setStoredData(storedData);
