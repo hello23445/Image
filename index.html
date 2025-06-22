@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Generator</title>
+    <!-- Add Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -98,6 +100,7 @@
             background-color: rgba(0,0,0,0.5);
             justify-content: center;
             align-items: center;
+            overflow-y: auto;
         }
 
         .modal-content {
@@ -109,6 +112,8 @@
             text-align: center;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             animation: fadeIn 0.3s ease-in-out;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         @keyframes fadeIn {
@@ -151,6 +156,9 @@
             margin: 0;
             flex-grow: 1;
             font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .error-message, .success-message {
@@ -174,31 +182,31 @@
             margin-bottom: 10px;
         }
 
-        #noAttemptsModal .modal-content {
+        #noAttemptsModal .modal-content, #noAttemptsMessage .input-group {
             background: linear-gradient(135deg, #ffffff, #f0f0f0);
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
 
-        #noAttemptsModal h2 {
+        #noAttemptsModal h2, #noAttemptsMessage h2 {
             color: #333;
             font-size: 24px;
             margin-bottom: 15px;
         }
 
-        #noAttemptsModal p {
+        #noAttemptsModal p, #noAttemptsMessage p {
             color: #666;
             font-size: 16px;
             margin-bottom: 20px;
         }
 
-        #noAttemptsModal .input-group {
+        #noAttemptsModal .input-group, #noAttemptsMessage .input-group {
             margin-bottom: 20px;
             position: relative;
         }
 
-        #noAttemptsModal input {
+        #noAttemptsModal input, #noAttemptsMessage input {
             padding: 12px;
             border: 2px solid #4CAF50;
             border-radius: 8px;
@@ -206,12 +214,12 @@
             transition: border-color 0.3s, box-shadow 0.3s;
         }
 
-        #noAttemptsModal input:focus {
+        #noAttemptsModal input:focus, #noAttemptsMessage input:focus {
             border-color: #45a049;
             box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
         }
 
-        #noAttemptsModal button {
+        #noAttemptsModal button, #noAttemptsMessage button {
             padding: 12px 25px;
             background: linear-gradient(90deg, #4CAF50, #45a049);
             border-radius: 8px;
@@ -219,9 +227,13 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        #noAttemptsModal button:hover {
+        #noAttemptsModal button:hover, #noAttemptsMessage button:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .remember-me-group {
+            margin-top: 10px;
         }
 
         @media (max-width: 768px) {
@@ -237,7 +249,17 @@
     </style>
 </head>
 <body>
-    <div id="noAttemptsMessage" style="display: none;"></div>
+    <div id="noAttemptsMessage" style="display: none;">
+        <div class="modal-content">
+            <h2>Попытки закончились</h2>
+            <p>У вас нет доступных генераций на сегодня. Загляните завтра!</p>
+            <div class="input-group">
+                <label for="promoCodeInitial">Введите промокод</label>
+                <input type="text" id="promoCodeInitial">
+            </div>
+            <button onclick="checkPromoCodeInitial()">Отправить</button>
+        </div>
+    </div>
     <div id="mainContainer" class="container" style="display: none;">
         <div class="left-section">
             <div class="input-group">
@@ -362,23 +384,23 @@
 
     <div id="messengerModal" class="modal" style="display: none;">
         <div class="modal-content">
-            <h2>Выберите способ отправки</h2>
+            <h2>Выберите способ получения результата</h2>
             <div class="radio-group">
                 <div class="radio-option" onclick="document.getElementById('whatsapp').click()">
                     <input type="radio" name="messenger" id="whatsapp" value="whatsapp">
-                    <label for="whatsapp">Отправить мне по WhatsApp</label>
+                    <label for="whatsapp"><i class="fa-brands fa-whatsapp"></i> Отправить мне по WhatsApp</label>
                 </div>
                 <div class="radio-option" onclick="document.getElementById('email').click()">
                     <input type="radio" name="messenger" id="email" value="email">
-                    <label for="email">Отправить мне на почту</label>
+                    <label for="email"><i class="fa-solid fa-envelope"></i> Отправить мне на почту</label>
                 </div>
                 <div class="radio-option" onclick="document.getElementById('telegram').click()">
                     <input type="radio" name="messenger" id="telegram" value="telegram">
-                    <label for="telegram">Отправить мне по Telegram</label>
+                    <label for="telegram"><i class="fa-brands fa-telegram"></i> Отправить мне по Telegram</label>
                 </div>
                 <div class="radio-option" onclick="document.getElementById('telegramBot').click()">
                     <input type="radio" name="messenger" id="telegramBot" value="telegramBot">
-                    <label for="telegramBot">Отправить мне через Telegram бота</label>
+                    <label for="telegramBot"><i class="fa-brands fa-telegram"></i> Отправить мне через Telegram бота</label>
                 </div>
             </div>
             <div id="contactInput" style="display: none;">
@@ -386,7 +408,7 @@
                     <label id="contactLabel"></label>
                     <input type="text" id="contact">
                 </div>
-                <div class="input-group">
+                <div class="input-group remember-me-group">
                     <label>
                         <input type="checkbox" id="rememberMe"> Запомнить меня
                     </label>
@@ -523,19 +545,6 @@
             } else if (data.attempts >= MAX_DAILY_ATTEMPTS) {
                 if (!data.promoCode) {
                     noAttemptsMessage.style.display = 'block';
-                    noAttemptsMessage.textContent = 'У вас не осталось генераций. Зайдите завтра заново.\n';
-                    const existingPromoInput = document.getElementById('promoCodeInitial');
-                    if (!existingPromoInput) {
-                        const promoInput = document.createElement('input');
-                        promoInput.type = 'text';
-                        promoInput.id = 'promoCodeInitial';
-                        promoInput.placeholder = 'Введите промокод здесь';
-                        noAttemptsMessage.insertAdjacentElement('afterend', promoInput);
-                        const applyButton = document.createElement('button');
-                        applyButton.textContent = 'Отправить';
-                        applyButton.onclick = checkPromoCodeInitial;
-                        promoInput.insertAdjacentElement('afterend', applyButton);
-                    }
                     mainContainer.style.display = 'none';
                     return false;
                 } else if (data.attempts >= 6 && !hasShownPromoClear) {
@@ -584,12 +593,15 @@
                 data.attempts = 0;
                 setStoredData(data);
                 noAttemptsMessage.style.display = 'none';
-                promoInput.remove();
-                document.querySelector('button[onclick="checkPromoCodeInitial"]').remove();
                 mainContainer.style.display = 'flex';
                 checkAttempts();
             } else {
-                noAttemptsMessage.textContent = 'Неверный промокод';
+                const messageDiv = noAttemptsMessage.querySelector('.modal-content');
+                const warningDiv = messageDiv.querySelector('.warning') || document.createElement('div');
+                warningDiv.className = 'warning';
+                warningDiv.textContent = 'Неверный промокод';
+                warningDiv.style.display = 'block';
+                messageDiv.appendChild(warningDiv);
             }
         }
 
@@ -727,10 +739,18 @@
             }
 
             const phoneRegex = /^\+\d{6,14}$/;
-            if (selectedMessenger.value === 'whatsapp' || selectedMessenger.value === 'telegram') {
+            const telegramUsernameRegex = /^@[\w]{5,32}$/;
+            if (selectedMessenger.value === 'whatsapp') {
                 if (!phoneRegex.test(contact.value.trim())) {
                     contact.classList.add('error');
                     warning.textContent = 'Введите номер телефона в международном формате (например, +1234567890)';
+                    warning.style.display = 'block';
+                    return;
+                }
+            } else if (selectedMessenger.value === 'telegram') {
+                if (!phoneRegex.test(contact.value.trim()) && !telegramUsernameRegex.test(contact.value.trim())) {
+                    contact.classList.add('error');
+                    warning.textContent = 'Введите @username или номер телефона в международном формате (например, +1234567890)';
                     warning.style.display = 'block';
                     return;
                 }
@@ -787,8 +807,8 @@
             const autoTextStyleText = autoTextStyle.checked ? 'Автоматический выбор стиля текста включено.' : 'Автоматический выбор стиля текста выключено.';
             const message = `
 Описание: ${descriptionInput.value}
-Текст: ${textInput.value || 'Не указан'}
-Исключения: ${exclusionsInput.value || 'Не указан'}
+Текст: ${textInput.value || 'Não especificado'}
+Исключения: ${exclusionsInput.value || 'Não especificado'}
 Качество: ${qualitySelect.value}
 Размер: ${sizeInput.value || sizeSelect.value}
 Стиль: ${styleSelect.value}
@@ -835,7 +855,7 @@ ${autoTextStyleText}
                 checkAttempts();
                 document.getElementById('successMessage').style.display = 'none';
                 document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('errorCode').textContent = error.message || 'Неизвестная ошибка';
+                document.getElementById('errorCode').textContent = error.message || 'Ошибка';
             });
         }
 
