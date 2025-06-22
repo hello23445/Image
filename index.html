@@ -158,7 +158,11 @@
             font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 5px; /* Reduced gap between icon and text */
+        }
+
+        .radio-option label .icon-end {
+            margin-left: auto; /* Push end icon to the right */
         }
 
         .error-message, .success-message {
@@ -388,19 +392,35 @@
             <div class="radio-group">
                 <div class="radio-option" onclick="document.getElementById('whatsapp').click()">
                     <input type="radio" name="messenger" id="whatsapp" value="whatsapp">
-                    <label for="whatsapp"><i class="fa-brands fa-whatsapp"></i> Отправить мне по WhatsApp</label>
+                    <label for="whatsapp">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        Отправить мне по WhatsApp
+                        <i class="fa-brands fa-whatsapp icon-end"></i>
+                    </label>
                 </div>
                 <div class="radio-option" onclick="document.getElementById('email').click()">
                     <input type="radio" name="messenger" id="email" value="email">
-                    <label for="email"><i class="fa-solid fa-envelope"></i> Отправить мне на почту</label>
+                    <label for="email">
+                        <i class="fa-solid fa-envelope"></i>
+                        Отправить мне на почту
+                        <i class="fa-solid fa-envelope icon-end"></i>
+                    </label>
                 </div>
                 <div class="radio-option" onclick="document.getElementById('telegram').click()">
                     <input type="radio" name="messenger" id="telegram" value="telegram">
-                    <label for="telegram"><i class="fa-brands fa-telegram"></i> Отправить мне по Telegram</label>
+                    <label for="telegram">
+                        <i class="fa-brands fa-telegram"></i>
+                        Отправить мне по Telegram
+                        <i class="fa-brands fa-telegram icon-end"></i>
+                    </label>
                 </div>
                 <div class="radio-option" onclick="document.getElementById('telegramBot').click()">
                     <input type="radio" name="messenger" id="telegramBot" value="telegramBot">
-                    <label for="telegramBot"><i class="fa-brands fa-telegram"></i> Отправить мне через Telegram бота</label>
+                    <label for="telegramBot">
+                        <i class="fa-brands fa-telegram"></i>
+                        Отправить мне через Telegram бота
+                        <i class="fa-brands fa-telegram icon-end"></i>
+                    </label>
                 </div>
             </div>
             <div id="contactInput" style="display: none;">
