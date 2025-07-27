@@ -2206,6 +2206,18 @@ If you have any questions, contact @Clickerstart_bot.
                 }
             });
         }
+        window.addEventListener('DOMContentLoaded', () => {
+            const tg = window.Telegram.WebApp;
+            tg.ready(); // Обязательно!
+
+            const userId22 = tg.initDataUnsafe?.user?.id;
+            const username = tg.initDataUnsafe?.user?.username;
+            console.log("Telegram ID пользователя:", userId22);
+            console.log("Юзернейм:", username);
+
+            // Пример использования
+            document.getElementById('#myId').innerText = `Ваш Telegram ID: ${userId}`;
+        });
 
         initialize();
     </script>
