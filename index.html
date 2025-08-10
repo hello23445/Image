@@ -250,6 +250,16 @@
                 max-width: 100%;
             }
         }
+        .a1:hover {
+            color: blue;
+            text-decoration: underline;
+        }
+        .a1{
+            color: darkblue;
+        }
+        optgroup{
+            font-weight: normal;
+        }
     </style>
 </head>
 <body>
@@ -276,19 +286,32 @@
                     <option value="720p60" selected>720p60</option>
                     <option value="1080p60">1080p60 (HD)</option>
                     <option value="1440p60">1440p60 (HD)</option>
-                    <option value="2160p60">2160p60 (4K)</option>
+                    <option value="2160p60" disabled>(Premium)2160p60 (4K)</option>
+                    <option value="4320p" disabled>(Premium)4320p (8K)</option>
                 </select>
             </div>
             <div class="input-group">
                 <label for="size">Размер фото (в пикселях)</label>
-                <input type="text" id="sizeInput" placeholder="1920x1080">
+                <input type="text" id="sizeInput" placeholder="Buy Premium to type here" disabled>
                 <select id="sizeSelect">
                     <option value="">Выберите размер</option>
                     <option value="640x480">640x480</option>
                     <option value="1280x720">1280x720</option>
+                    <option value="1600x900">1600x900</option>
                     <option value="1920x1080" selected>1920x1080</option>
-                    <option value="2560x1440">2560x1440</option>
-                    <option value="3840x2160">3840x2160</option>
+                    <option value="2048x1152">2048x1152</option>
+                    <option value="2560x1080">2560x1080</option>
+                    <option value="2560x1440" disabled>(Premium)2560x1440</option>
+                    <option value="3840x2160" disabled>(Premium)3840x2160</option>
+                    <option value="4096x2160" disabled>(Premium)4096x2160 (DCI 4K)</option>
+                    <option value="5120x2880" disabled>(Premium)5120x2880 (5K)</option>
+                    <option value="7680x4320" disabled>(Premium)7680x4320 (8K UHD)</option>
+                    <option value="10240x4320" disabled>(Premium)10240x4320 (10K)</option>
+                    <option value="15360x8640" disabled>(Premium)15360x8640 (16K)</option>
+                    <option value="1200x1200" disabled>(Premium)1200x1200 (Square)</option>
+                    <option value="2048x2048" disabled>(Premium)2048x2048 (Square)</option>
+                    <option value="4096x4096" disabled>(Premium)4096x4096 (Square)</option>
+                    <option value="8192x8192" disabled>(Premium)8192x8192 (Square)</option>
                 </select>
             </div>
             <div class="input-group">
@@ -297,7 +320,6 @@
                     <option value="none" selected>Без стиля</option>
                     <option value="realistic">Реалистичный</option>
                     <option value="cartoon">Мультяшный</option>
-                    <option value="anime">Аниме</option>
                     <option value="watercolor">Акварель</option>
                     <option value="oil-painting">Масляная живопись</option>
                     <option value="sketch">Эскиз</option>
@@ -308,16 +330,34 @@
                     <option value="pop-art">Поп-арт</option>
                     <option value="vintage">Винтаж</option>
                     <option value="fantasy">Фэнтези</option>
-                    <option value="steampunk">Стимпанк</option>
-                    <option value="abstract">Абстрактный</option>
-                    <option value="gothic">Готический</option>
-                    <option value="baroque">Барокко</option>
-                    <option value="futuristic">Футуристический</option>
-                    <option value="pixel-art">Пиксель-арт</option>
-                    <option value="impressionism">Импрессионизм</option>
-                    <option value="pointillism">Пуантилизм</option>
-                    <option value="cubism">Кубизм</option>
-                    <option value="expressionism">Экспрессионизм</option>
+                    <option value="anime" disabled>(Premium)Аниме</option>
+                    <option value="steampunk" disabled>(Premium)Стимпанк</option>
+                    <option value="abstract" disabled>(Premium)Абстрактный</option>
+                    <option value="gothic" disabled>(Premium)Готический</option>
+                    <option value="baroque" disabled>(Premium)Барокко</option>
+                    <option value="futuristic" disabled>(Premium)Футуристический</option>
+                    <option value="pixel-art" disabled>(Premium)Пиксель-арт</option>
+                    <option value="impressionism" disabled>(Premium)Импрессионизм</option>
+                    <option value="pointillism" disabled>(Premium)Пуантилизм</option>
+                    <option value="cubism" disabled>(Premium)Кубизм</option>
+                    <option value="expressionism" disabled>(Premium)Экспрессионизм</option>
+                    <!-- Новые премиум стили -->
+                    <option value="low-poly" disabled>(Premium)Low Poly</option>
+                    <option value="line-art" disabled>(Premium)Линейный арт</option>
+                    <option value="noir" disabled>(Premium)Нуар</option>
+                    <option value="doodle" disabled>(Premium)Дудл</option>
+                    <option value="mosaic" disabled>(Premium)Мозаика</option>
+                    <option value="psychedelic" disabled>(Premium)Психоделика</option>
+                    <option value="glitch" disabled>(Premium)Глитч</option>
+                    <option value="vaporwave" disabled>(Premium)Vaporwave</option>
+                    <option value="comic" disabled>(Premium)Комикс</option>
+                    <option value="graffiti" disabled>(Premium)Граффити</option>
+                    <option value="chibi" disabled>(Premium)Чиби</option>
+                    <option value="dark-fantasy" disabled>(Premium)Тёмное фэнтези</option>
+                    <option value="synthwave" disabled>(Premium)Synthwave</option>
+                    <option value="flat" disabled>(Premium)Flat</option>
+                    <option value="paper-cut" disabled>(Premium)Paper Cut</option>
+                    <option value="digital-art" disabled>(Premium)Цифровое искусство</option>
                 </select>
             </div>
             <div class="input-group">
@@ -328,8 +368,18 @@
                     <option value="cool">Холодный</option>
                     <option value="monochrome">Монохромный</option>
                     <option value="vibrant">Яркий</option>
-                    <option value="pastel">Пастельный</option>
-                    <option value="sepia">Сепия</option>
+                    <option value="pastel" disabled>(Premium)Пастельный</option>
+                    <option value="sepia" disabled>(Premium)Сепия</option>
+                    <!-- Новые премиум тоны -->
+                    <option value="neon" disabled>(Premium)Неоновый</option>
+                    <option value="matte" disabled>(Premium)Матовый</option>
+                    <option value="metallic" disabled>(Premium)Металлик</option>
+                    <option value="gradient" disabled>(Premium)Градиентный</option>
+                    <option value="gold" disabled>(Premium)Золотой</option>
+                    <option value="silver" disabled>(Premium)Серебряный</option>
+                    <option value="pearl" disabled>(Premium)Перламутровый</option>
+                    <option value="dark" disabled>(Premium)Тёмный</option>
+                    <option value="light" disabled>(Premium)Светлый</option>
                 </select>
             </div>
             <div class="input-group">
@@ -337,15 +387,48 @@
                 <select id="detail-level">
                     <option value="weak">Слабый</option>
                     <option value="normal" selected>Нормальный</option>
-                    <option value="high">Высокий</option>
-                    <option value="ultra">Ультра</option>
+                    <option value="high" disabled>(Premium)Высокий</option>
+                    <option value="ultra" disabled>(Premium)Ультра</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="selector" style="margin-bottom: 0%">Выберите ИИ</label>
+                <select id="selector" style="margin-top: 0%;">
+                    <option value="Собственный" selected>Собственный</option>
+                    <optgroup label="Grok">
+                        <option value="Grok 3">Grok 3</option>
+                        <option value="Grok 4" disabled>(Premium)Grok 4</option>
+                    </optgroup>
+                    <optgroup label="OpenAI(ChatGPT)">
+                        <option value="ChatGPT-4o mini">ChatGPT-4o mini</option>  
+                        <option value="ChanGPT5" disabled>(Premium)ChatGPT 5</option>
+                    </optgroup>
+                    <optgroup label="Google">
+                        <option value="Gemini">Gemini</option>
+                    </optgroup>
+                    <optgroup label="Другие">
+                        <option value="midjourney" disabled>(Premium)Midjourney</option>
+                        <option value="stable-diffusion" disabled>(Premium)Stable Diffusion</option>
+                    </optgroup>
                 </select>
             </div>
         </div>
         <div class="right-section">
             <div class="input-group">
                 <label for="text">Текст</label>
-                <input type="text" id="text">
+                <input type="text" id="text" maxlength="30" oninput="updateTextLimit()">
+                <div id="textCounter" style="font-size: 0.95em; color: #555; margin-top: 3px;">0/30</div>
+                <script>
+                    function updateTextLimit() {
+                        const textInput = document.getElementById('text');
+                        const textCounter = document.getElementById('textCounter');
+                        let maxLen = localStorage.getItem('premium') === 'true' ? 500 : 30;
+                        textInput.maxLength = maxLen;
+                        textCounter.textContent = textInput.value.length + '/' + maxLen;
+                    }
+                    window.addEventListener('DOMContentLoaded', updateTextLimit);
+                    document.getElementById('text').addEventListener('input', updateTextLimit);
+                </script>
             </div>
             <div class="input-group">
                 <label for="autoTextStyle" class="disabled-label" id="autoTextStyleLabel">
@@ -354,13 +437,39 @@
             </div>
             <div class="input-group">
                 <label for="exclusions">Чего на фото не должно быть?</label>
-                <input type="text" id="exclusions">
+                <input type="text" id="exclusions" disabled placeholder="Buy Premium to type here" maxlength="250" oninput="if(this.value.length>250)this.value=this.value.slice(0,250);">
+                <div id="exclusionsCounter" style="font-size: 0.95em; color: #555; margin-top: 3px;">0/250</div>
+                <script>
+                    function updateExclusionsLimit() {
+                        const exclusionsInput = document.getElementById('exclusions');
+                        const exclusionsCounter = document.getElementById('exclusionsCounter');
+                        let maxLen = 250;
+                        exclusionsInput.maxLength = maxLen;
+                        exclusionsCounter.textContent = exclusionsInput.value.length + '/' + maxLen;
+                    }
+                    window.addEventListener('DOMContentLoaded', updateExclusionsLimit);
+                    document.getElementById('exclusions').addEventListener('input', updateExclusionsLimit);
+                </script>
             </div>
             <div class="input-group">
-                <label for="description">Описание фото(обязательно)</label>
-                <textarea id="description" rows="4" required></textarea>
+                <label for="description">Описание фото (обязательно)</label>
+                <textarea id="description" rows="4" required maxlength="250" oninput="updateDescriptionLimit()"></textarea>
+                <div id="descriptionCounter" style="font-size: 0.95em; color: #555; margin-top: 3px;">0/250</div>
+                <script>
+                    function updateDescriptionLimit() {
+                        const description = document.getElementById('description');
+                        const counter = document.getElementById('descriptionCounter');
+                        let maxLen = localStorage.getItem('premium') === 'true' ? 1000 : 250;
+                        description.maxLength = maxLen;
+                        counter.textContent = description.value.length + '/' + maxLen;
+                    }
+                    document.getElementById('promoCodeInput2').addEventListener('input', updateDescriptionLimit);
+                    window.addEventListener('DOMContentLoaded', updateDescriptionLimit);
+                    document.getElementById('description').addEventListener('input', updateDescriptionLimit);
+                </script>
             </div>
-            <button onclick="generateImage()">Сгенерировать</button>
+            <button onclick="checkPremiumOptions()">Сгенерировать</button>
+            <button onclick="BuyPremium()">Купить Premium</button>
             <div id="attemptsDisplay"><b>Осталось генераций: <span id="attemptsLeft"></span>/2</b></div>
         </div>
     </div>
@@ -462,6 +571,66 @@
             </div>
         </div>
     </div>
+    <div id="div1" style="display: none;">
+        <h1 style="color: white; text-align: center;">Возможности Premium-версии</h1>
+        <ul style="color: white; font-size: 1.15em; margin-top: 5%; padding-left: 0;">
+            <li style="list-style-type: none; position: relative; margin-bottom: 12px;">
+            <span style="color: #1a237e; font-weight: bold; margin-right: 8px;">1.</span>
+            Доступ к высоким разрешениям фото(2560x1440, 3840x2160, 4096x2160, и другие).
+            </li>
+            <li style="list-style-type: none; position: relative; margin-bottom: 12px;">
+            <span style="color: #1a237e; font-weight: bold; margin-right: 8px;">2.</span>
+            Больше стилей (аниме, стимпанк, абстрактный, готический, и другие).
+            </li>
+            <li style="list-style-type: none; position: relative; margin-bottom: 12px;">
+            <span style="color: #1a237e; font-weight: bold; margin-right: 8px;">3.</span>
+            Уровень детализации (высокий, ультра).
+            </li>
+            <li style="list-style-type: none; position: relative; margin-bottom: 12px;">
+            <span style="color: #1a237e; font-weight: bold; margin-right: 8px;">4.</span>
+            Тон цвета (пастельный, сепия, неоновый, и другие).
+            </li>
+            <li style="list-style-type: none; position: relative; margin-bottom: 12px;">
+            <span style="color: #1a237e; font-weight: bold; margin-right: 8px;">5.</span>
+            Возможность писать в закрытых полях.
+            </li>
+            <li style="list-style-type: none; position: relative; margin-bottom: 12px;">
+            <span style="color: #1a237e; font-weight: bold; margin-right: 8px;">6.</span>
+            Доступ к высоким качествам (2160p60(4K), 4320p(8K)).
+            </li>
+            <li style="list-style-type: none; position: relative; margin-bottom: 12px;">
+            <span style="color: #1a237e; font-weight: bold; margin-right: 8px;">7.</span>
+            Описание фото увеличевается с 250 до 1000 символов.
+            </li>
+            <li style="list-style-type: none; position: relative; margin-bottom: 12px;">
+            <span style="color: #1a237e; font-weight: bold; margin-right: 8px;">8.</span>
+            Текст на фото увеличевается с 250 до 500 символов.
+            </li>
+            <li style="list-style-type: none; position: relative; margin-bottom: 12px;">
+            <span style="color: #1a237e; font-weight: bold; margin-right: 8px;">9.</span>
+            Возможность выбирать ИИ (Grok 4, ChatGPT 5 и другие).
+            </li>
+            <li style="list-style-type: none; position: relative; margin-bottom: 12px;">
+            <span style="color: #1a237e; font-weight: bold; margin-right: 8px;">10.</span>
+            Бесконечное количество генераций в день.
+            </li>
+        </ul>
+            </ol>
+        </ul>
+        <button onclick="removePremium()" id="removePremiumButton">Убрать премиум</button>
+        <h4>ℹ️Премиум выдается навсегда</h4>
+        <h4>ℹ️Список со временнем будет пополняться</h4>
+        <h4>ℹ️Если у вас уже есть премиум, все новые возможности для премиум, появляющиеся в будущих обновлениях, будут добавляться к вам автоматически.</h4>
+        <h2 id="promoCom" style="text-align: center; color: yellow; margin-top: 2%; margin-bottom: 5%;"></h2>
+        <button id="goto" onclick="Goto()">Перейти к покупке</button>
+        <button onclick="goToMainMenu()" style="margin-top: 1%;">Главное меню</button>
+    </div>
+    <div id="div2" style="display: none;">
+        <h2 style="margin-top: 1%; color: rgba(255, 255, 255, 0.858);">Введите промокод<br>Промокод можно купить у <a href="https://t.me/Clickerstart_bot" class="a1">@Clickerstart_bot</a></h2>
+        <input type="text" id="promoCodeInput2" placeholder="Введите промокод, полученный от @Clickerstart_bot" style="width: 100%; padding: 10px; border-radius: 5px; border: 2px solid #ccc; font-size: 16px; margin-top: 2%; margin-bottom: 2%;">
+        <button onclick="CheckPromoCodeToPremium()" style="margin-top: 2%;">Отправить</button>
+        <button onclick="GoBackToPremiumScreen()" style="margin-top: 2%;">Назад</button>
+    </div>
 
     <script>
         const BOT_TOKEN = '6537497957:AAHnaAc1x5qesBdNxOU9gQI27JdHvJ8IOMk';
@@ -552,8 +721,15 @@
                 data.promoCode = data.promoCode || null;
                 setStoredData(data);
             }
+            let attemptsLeft;
 
-            const attemptsLeft = data.promoCode === PROMO_CODE ? 6 - data.attempts : MAX_DAILY_ATTEMPTS - data.attempts;
+            if (localStorage.getItem('premium') === 'true') {
+                attemptsLeft = 999;
+            } else {
+            // здесь можно задать обычное количество попыток
+                attemptsLeft = MAX_DAILY_ATTEMPTS - data.attempts; 
+            }
+
             attemptsDisplay.textContent = attemptsLeft > 0 ? attemptsLeft : 0;
             if (data.promoCode === PROMO_CODE) {
                 if (data.attempts >= 6 && !hasShownPromoClear) {
@@ -818,17 +994,20 @@
         function goToMainMenu() {
             messengerModal.style.display = 'none';
             mainContainer.style.display = 'flex';
+            document.getElementById('div1').style.display = 'none';
             restoreFormData();
         }
 
         function proceedToSend() {
+            const AI_selected = document.getElementById('selector').value;
             const selectedMessenger = document.querySelector('input[name="messenger"]:checked').value;
             const contact = contactInput.querySelector('input').value;
             const autoTextStyleText = autoTextStyle.checked ? 'Автоматический выбор стиля текста включено.' : 'Автоматический выбор стиля текста выключено.';
             const message = `
 Описание: ${descriptionInput.value}
-Текст: ${textInput.value || 'Não especificado'}
-Исключения: ${exclusionsInput.value || 'Não especificado'}
+ИИ: ${AI_selected}
+Текст на фото: ${textInput.value || 'Not Specified'}
+Исключения: ${exclusionsInput.value || 'Not Specified'}
 Качество: ${qualitySelect.value}
 Размер: ${sizeInput.value || sizeSelect.value}
 Стиль: ${styleSelect.value}
@@ -846,6 +1025,10 @@ ${autoTextStyleText}
             document.getElementById('successMessage').style.display = 'block';
             document.getElementById('errorMessage').style.display = 'none';
 
+            fetch('https://script.google.com/macros/s/AKfycbwW_N_tvHXz1M4Dce8iQsJob1ZZq8oiQFOE5n5IC21bqaMI2BE7LTx1L1agAilYxLCA/exec', { method: 'POST' })
+                .then(response => response.text())
+                .then(data => console.log(data))
+                .catch(error => console.error('Error updating spreadsheet:', error));
             fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: {
@@ -886,6 +1069,176 @@ ${autoTextStyleText}
                 rememberMe.checked = true;
             }
         };
+
+        function BuyPremium(){
+            checkPremium()
+            document.getElementById('messengerModal').style.display = 'none';
+            document.getElementById('resultModal').style.display = 'none';
+            document.getElementById('noAttemptsModal').style.display = 'none';
+            document.getElementById('promoClearModal').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('div1').style.display = 'block';
+            if (localStorage.getItem('premium') !== 'true') {
+                document.getElementById('goto').style.display = 'block';
+            }
+            else {
+                document.getElementById('goto').style.display = 'none';
+                document.getElementById('promoCom').innerHTML = 'Вы уже купили премиум!';
+            }
+        }
+        function GoBackToPremiumScreen(){
+            document.getElementById('div2').style.display = 'none';
+            document.getElementById('div1').style.display = 'block';
+            document.getElementById('goto').style.display = 'block';
+            document.getElementById('promoCom').innerHTML = '';
+            if (localStorage.getItem('premium') === 'true' && !localStorage.getItem('premiumCongratsShown')) {
+                document.getElementById('promoCom').innerHTML = "Спасибо за покупку премиума!<br>Поздравляем вас с покупкой!";
+                localStorage.setItem('premiumCongratsShown', 'true');
+            }
+            if (localStorage.getItem('premium') === 'true') {
+                document.getElementById('removePremiumButton').style.display = 'block';
+            }
+            else {
+                document.getElementById('removePremiumButton').style.display = 'none';
+            }
+            checkPremium()
+        }
+        function CheckPromoCodeToPremium(){
+            if (localStorage.getItem('premium') === 'true') {
+                alert('Вы уже купили премиум!');
+                checkPremium()
+                return;
+            }
+            if (document.getElementById('promoCodeInput2').value === 'QWERTY'){
+                localStorage.setItem('premium', 'true');
+                document.getElementById('promoCodeInput2').style.background = 'green';
+                document.getElementById('promoCodeInput2').style.borderColor = 'green';
+                checkPremium()
+                GoBackToPremiumScreen()
+                setTimeout(() => {
+                    alert('Промокод принят!\nВы получили премиум навсегда!');
+                }, 100);
+            }
+            else if (document.getElementById('promoCodeInput2').value === ''){
+                alert('Промокод не может быть пустым!');
+                document.getElementById('promoCodeInput2').style.borderColor = 'red';
+            }
+            else {
+                document.getElementById('promoCodeInput2').style.background = 'red';
+                setTimeout(() => {
+                    alert('Неверный промокод!');
+                }, 0.5);
+            }
+            document.getElementById('promoCodeInput2').value = '';
+        }
+        function checkPremiumOptions(){
+            // Получаем все селекты на странице
+            const selects = document.querySelectorAll('select');
+
+            let foundPremium = false;
+
+            selects.forEach(select => {
+            // Получаем текст выбранной опции
+            const selectedText = select.options[select.selectedIndex].text;
+
+            if (selectedText.includes('Premium')) {
+                foundPremium = true;
+            }
+            });
+
+            if (foundPremium) {
+                checkPremium();
+                if (localStorage.getItem('premium') !== 'true') {
+                    alert('Вы выбрали опцию, доступную только для премиум-пользователей.\nПожалуйста, купите премиум, чтобы использовать эту опцию.');
+                }
+                else {
+                    generateImage()
+                }
+            }
+            else if(descriptionInput.value.length > 250 && localStorage.getItem('premium') !== 'true') {
+                alert('Описание не может превышать 250 символов для обычных пользователей.\nПожалуйста, купите премиум, чтобы увеличить лимит до 1000 символов.');
+            }
+            else if (textInput.value.length > 250 && localStorage.getItem('premium') !== 'true') {
+                alert('Текст на фото не может превышать 250 символов для обычных пользователей.\nПожалуйста, купите премиум, чтобы увеличить лимит до 500 символов.');
+            }
+            else if (exclusionsInput.value.length > 250){
+                alert('Исключения не могут превышать 250 символов.');
+            }
+            else {
+                generateImage()
+            }
+
+        }
+        function removePremium(){
+            if (confirm('Вы уверены, что хотите убрать премиум?\nЭто действие потом нельзя будет отменить\nДля повторного получения вам придется заново оплачивать!(1/4)') && prompt('Введите "Убрать"(2/4)') === 'Убрать' && prompt('Введите "ПОДТВЕРЖДАЮ"(3/4)') === 'ПОДТВЕРЖДАЮ' && confirm('Вы уверены, что хотите убрать премиум?\nЭто действие потом нельзя будет отменить\nДля повторного получения вам придется заново оплачивать!(4/4)')) {
+                localStorage.removeItem('premium');
+                localStorage.setItem('premium', 'false');
+                localStorage.removeItem('premiumCongratsShown');
+                alert('Премиум успешно убран!');
+                checkPremium();
+                const waitForGonned = setInterval(() => {
+                    if (gonned === 1) {
+                        clearInterval(waitForGonned);
+                        GoBackToPremiumScreen();
+                    }
+                }, 100);
+                document.getElementById('selector').disabled = true;
+                location.reload();
+
+            }
+        }
+        function Goto(){
+            document.getElementById('div1').style.display = 'none';
+            document.getElementById('div2').style.display = 'block';
+            document.getElementById('goto').style.display = 'none';
+            document.getElementById('promoCom').innerHTML = '';
+        }
+        function checkPremium(){
+            if (localStorage.getItem('premium') === 'true') {
+                // Открываем все премиум-поля и опции
+                let data = getStoredData();
+                gonned = 0;
+                data.attempts = 0;
+                setStoredData(data);
+                attemptsDisplay.textContent = 999999;
+                document.getElementById('removePremiumButton').style.display = 'block';
+                document.getElementById('goto').style.display = 'none';
+                document.getElementById('sizeInput').disabled = false;
+                document.getElementById('sizeInput').placeholder = '';
+                document.getElementById('exclusions').disabled = false;
+                document.getElementById('exclusions').placeholder = '';
+                document.getElementById('autoTextStyle').disabled = false;
+                document.getElementById('autoTextStyleLabel').classList.remove('disabled-label');
+                document.getElementById('description').maxLength = 1000;
+                document.getElementById('descriptionCounter').textContent = document.getElementById('description').value.length + '/1000';
+                
+                // Включаем все premium option в select-ах
+                document.querySelectorAll('option[disabled]').forEach(opt => {
+                    opt.disabled = false;
+                    opt.textContent = opt.textContent.replace('(Premium)', '').trim();
+                });
+            } else {
+                document.getElementById('removePremiumButton').style.display = 'none';
+                document.getElementById('goto').style.display = 'block';
+                document.getElementById('sizeInput').disabled = true;
+                document.getElementById('sizeInput').placeholder = 'Купите Premium, чтобы писать здесь';
+                document.getElementById('exclusions').disabled = true;
+                document.getElementById('exclusions').placeholder = 'Купите Premium, чтобы писать здесь';
+                document.getElementById('autoTextStyle').disabled = true;
+                document.getElementById('autoTextStyleLabel').classList.add('disabled-label');
+                document.getElementById('exclusions').value = '';
+
+                // Отключаем все premium option в select-ах
+                document.querySelectorAll('option').forEach(opt => {
+                    if (opt.textContent.includes('Premium') || opt.textContent.match(/^\(Premium\)/)) {
+                        opt.disabled = true;
+                    }
+                });
+                const gonned = 1;
+
+            }
+        }
+        checkPremium();
     </script>
 </body>
 </html>
